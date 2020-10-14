@@ -19,7 +19,7 @@ describe('Board', function() {
     });
   };
 
-  describe('Empty board', function() {
+  xdescribe('Empty board', function() {
     verifyConflictTypes([''], [
       [0, 0, 0, 0],
       [0, 0, 0, 0],

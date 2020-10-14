@@ -78,12 +78,29 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
+    /**
+     * @param {array} rowIdex
+     * @return {boolean}
+     */
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      // add up all the number elements in the row
+      // check if the sum of the elements is greater than one
+      //    if it is greater, return true;
+      // otherwise return false
+      var sum = 0;
+      for (let i = 0; i < rowIndex.length; i++) {
+        sum += rowIndex[i];
+      }
+      return sum > 1;
     },
 
     // test if any rows on this board contain conflicts
+    /**
+     * @param {}
+     * @return {}
+     */
     hasAnyRowConflicts: function() {
+
       return false; // fixme
     },
 
