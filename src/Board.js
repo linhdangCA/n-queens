@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -100,38 +100,118 @@
      * @return {}
      */
     hasAnyRowConflicts: function() {
-
-      return false; // fixme
+      var rows = this.rows();
+      for (var i = 0; i < rows.length; i++) {
+        if (this.hasRowConflictAt(rows[i])) {
+          return true;
+        }
+      }
+      return false;
+      // get the rows using the rows method
+      // loop over the rows
+      //   call hasRowConflictAt for each row
+      //     if it returns true
+      //       return true
     },
 
 
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
-    //
+    // @param {array} colIndex
+    // @return {boolean}
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      // add up all the number elements in the col
+      // check if the sum of the elements is greater than one
+      //    if it is greater, return true;
+      // otherwise return false
+      var sum = 0;
+      for (let i = 0; i < colIndex.length; i++) {
+        sum += colIndex[i];
+      }
+      return sum > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      for (var i = 0; i < rows.length; i++) {
+        var currentColumn = [];
+        for (var j = 0; j < rows.length; j++) {
+          currentColumn.push(rows[j][i]);
+        }
+        if (this.hasColConflictAt(currentColumn)) {
+          return true;
+        }
+      }
+      return false;
+      // get access to the matrix using the rows method
+      // iterate over the columns using an outside for loop
+      //   declare an empty array
+      //   iterate over the rows using a nested for loop
+      //     populate the array
+      //   if has call to the hasColConflictAt function is true
+      //     return true
+      // if it reaches here, return false
     },
 
 
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
+    // i = rows
+    // j = columns
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // initialize variables j to the given input and i to zero
+      // var j = majorDiagonalColumnIndexAtFirstRow;
+      // loop
+      for (var i = 0; i < this.rows().length; i++) {
+        //   initialize an empty array
+        var bucket = [];
+        var majorColumnIndex = majorDiagonalColumnIndexAtFirstRow;
+        var rows = i;
+        //   open a for loop, while i is less than row's length
+        while (rows < this.rows().length && majorColumnIndex < this.rows().length) {
+          //       push the coordinate value to the array
+          var elementAt = this.rows()[rows][majorColumnIndex];
+          bucket.push(elementAt);
+          //       increment i and j by 1
+          rows++;
+          majorColumnIndex++;
+        }
+        //     sum the values in the array
+        var sum = 0;
+        for (var i = 0; i < bucket.length; i++) {
+          sum += bucket[i];
+        }
+        //       if greater than 1
+        if (sum > 1) {
+          //         return true
+          return true;
+        }
+      }
+      // if not, then return false
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var result = this.hasMajorDiagonalConflictAt(0);
+      return this.hasMajorDiagonalConflictAt(0);
+      // var rows = this.rows();
+      // // loop over the first row
+      // for (var i = 0; i < rows[0].length; i++) {
+      //   // callback to each column index
+      //   if (this.hasMajorDiagonalConflictAt(i)) {
+      //     // return true
+      //     return true;
+      //   }
+      // }
+      // return false
+      // return false; // fixme
     },
 
 
