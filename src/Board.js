@@ -165,53 +165,51 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      // initialize variables j to the given input and i to zero
-      // var j = majorDiagonalColumnIndexAtFirstRow;
-      // loop
-      for (var i = 0; i < this.rows().length; i++) {
-        //   initialize an empty array
+      for (let i = 0; i < this.rows().length; i++) {
         var bucket = [];
         var majorColumnIndex = majorDiagonalColumnIndexAtFirstRow;
         var rows = i;
-        //   open a for loop, while i is less than row's length
-        while (rows < this.rows().length && majorColumnIndex < this.rows().length) {
-          //       push the coordinate value to the array
+
+        while ((rows < this.rows().length) && (majorColumnIndex < this.rows().length)) {
           var elementAt = this.rows()[rows][majorColumnIndex];
           bucket.push(elementAt);
-          //       increment i and j by 1
           rows++;
           majorColumnIndex++;
         }
-        //     sum the values in the array
+
         var sum = 0;
-        for (var i = 0; i < bucket.length; i++) {
+        for (let i = 0; i < bucket.length; i++) {
           sum += bucket[i];
         }
-        //       if greater than 1
         if (sum > 1) {
-          //         return true
           return true;
         }
       }
-      // if not, then return false
       return false;
+      // initialize variables j to the given input and i to zero
+      // loop
+      //   initialize an empty array
+      //   open a for loop, while i is less than row's length
+      //       push the coordinate value to the array
+      //       increment i and j by 1
+      //     sum the values in the array
+      //       if greater than 1
+      //         return true
+      // if not, then return false
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      var result = this.hasMajorDiagonalConflictAt(0);
-      return this.hasMajorDiagonalConflictAt(0);
-      // var rows = this.rows();
-      // // loop over the first row
-      // for (var i = 0; i < rows[0].length; i++) {
-      //   // callback to each column index
-      //   if (this.hasMajorDiagonalConflictAt(i)) {
-      //     // return true
-      //     return true;
-      //   }
-      // }
-      // return false
-      // return false; // fixme
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false; // fixme
+      // loop over the first row
+      // callback to each column index
+      // return true
+      // return false;
     },
 
 
@@ -221,12 +219,37 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      for (let i = 0; i < this.rows().length; i++) {
+        var bucket = [];
+        var minorColumnIndex = minorDiagonalColumnIndexAtFirstRow;
+        var rows = i;
+
+        while ((rows < this.rows().length) && (minorColumnIndex >= 0)) {
+          var elementAt = this.rows()[rows][minorColumnIndex];
+          bucket.push(elementAt);
+          rows++;
+          minorColumnIndex--;
+        }
+
+        var sum = 0;
+        for (let i = 0; i < bucket.length; i++) {
+          sum += bucket[i];
+        }
+        if (sum > 1) {
+          return true;
+        }
+      }
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      for (let i = this.rows().length - 1; i >= 0; i--) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
