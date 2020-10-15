@@ -82,187 +82,196 @@
      * @param {array} rowIdex
      * @return {boolean}
      */
-    hasRowConflictAt: function(rowIndex) {
-      // add up all the number elements in the row
-      // check if the sum of the elements is greater than one
-      //    if it is greater, return true;
-      // otherwise return false
-      var sum = 0;
-      for (let i = 0; i < rowIndex.length; i++) {
-        sum += rowIndex[i];
+    // ---------------copy--------------
+
+    hasRowConflictAt: function (rowIndex) {
+      let rows = this.rows();
+      let sum = 0;
+      for (let i = 0; i < rows.length; i++) {
+        sum += rows[rowIndex][i];
       }
-      return sum > 1;
+      if (sum > 1) {
+        return true;
+      }
+      return false;
+      // reduce to see if it equals 0 or 1
+      // if it does not equal to zero or one
+      // return true
+      // otherwise return false
     },
 
     // test if any rows on this board contain conflicts
-    /**
-     * @param {}
-     * @return {}
-     */
-    hasAnyRowConflicts: function() {
-      var rows = this.rows();
-      for (var i = 0; i < rows.length; i++) {
-        if (this.hasRowConflictAt(rows[i])) {
+    // input: n/a
+    // output: boolean - false if any row had a conflict
+    hasAnyRowConflicts: function () {
+      let rows = this.rows();
+      for (let i = 0; i < rows.length; i++) {
+        if (this.hasRowConflictAt(i)) {
           return true;
         }
       }
       return false;
-      // get the rows using the rows method
+      // // get the rows
       // loop over the rows
-      //   call hasRowConflictAt for each row
-      //     if it returns true
-      //       return true
+      // if one row has a conflict
+      // return true
+      // return false
     },
-
-
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
-    // @param {array} colIndex
-    // @return {boolean}
+    //
     // test if a specific column on this board contains a conflict
-    hasColConflictAt: function(colIndex) {
-      // add up all the number elements in the col
-      // check if the sum of the elements is greater than one
-      //    if it is greater, return true;
-      // otherwise return false
-      var sum = 0;
-      for (let i = 0; i < colIndex.length; i++) {
-        sum += colIndex[i];
+    hasColConflictAt: function (colIndex) {
+      // create buckets
+      this.columns = [];
+      let rows = this.rows();
+      for (let i = 0; i < rows.length; i++) {
+        this.columns.push([]);
       }
-      return sum > 1;
+
+      // populate buckets
+      for (let j = 0; j < rows.length; j++) {
+        let currentRow = rows[j];
+        for (let k = 0; k < currentRow.length; k++) {
+          let currentElement = currentRow[k];
+          this.columns[k].push(currentElement);
+        }
+      }
+
+      // checking for conflicts
+      let sum = 0;
+      for (let i = 0; i < this.columns[colIndex].length; i++) {
+        sum += this.columns[colIndex][i];
+      }
+      if (sum > 1) {
+        return true;
+      }
+      return false;
+      // let columns = this.columns;
+      // // reduce to see if it equals 0 or 1
+      // // if it does not equal to zero or one
+      // // return true
+      // // otherwise return false
     },
 
     // test if any columns on this board contain conflicts
-    hasAnyColConflicts: function() {
-      var rows = this.rows();
-      for (var i = 0; i < rows.length; i++) {
-        var currentColumn = [];
-        for (var j = 0; j < rows.length; j++) {
-          currentColumn.push(rows[j][i]);
-        }
-        if (this.hasColConflictAt(currentColumn)) {
+    hasAnyColConflicts: function () {
+      let columns = this.rows();
+      for (let l = 0; l < columns.length; l++) {
+        if (this.hasColConflictAt(l)) {
           return true;
         }
       }
       return false;
-      // get access to the matrix using the rows method
-      // iterate over the columns using an outside for loop
-      //   declare an empty array
-      //   iterate over the rows using a nested for loop
-      //     populate the array
-      //   if has call to the hasColConflictAt function is true
-      //     return true
-      // if it reaches here, return false
+      // create a columns property set to empty array literal
+      // get columns
+      // get rows
+      // create as many columns are there are rows
+      // loop over each row
+      // move each element of that row to it's respective column
+      // check if each column has a conflict
+      // if yes, then true
+      // otherwise, false
     },
-
-
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
-    // i = rows
-    // j = columns
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      for (let i = 0; i < this.rows().length; i++) {
-        var bucket = [];
-        var majorColumnIndex = majorDiagonalColumnIndexAtFirstRow;
-        var rows = i;
+    hasMajorDiagonalConflictAt: function (majorDiagonalColumnIndexAtFirstRow) {
+      // get rows
+      var rows = this.rows();
+      // initialize sum to zero
+      var sum = 0;
 
-        while ((rows < this.rows().length) && (majorColumnIndex < this.rows().length)) {
-          var elementAt = this.rows()[rows][majorColumnIndex];
-          bucket.push(elementAt);
-          rows++;
-          majorColumnIndex++;
-        }
-
-        var sum = 0;
-        for (let i = 0; i < bucket.length; i++) {
-          sum += bucket[i];
+      // if index is zero, evaluate the main major diagonal
+      if (majorDiagonalColumnIndexAtFirstRow === 0) {
+        // use to check the main diagonal
+        for (var h = 0; h < rows.length; h++) {
+          sum += rows[h][h];
         }
         if (sum > 1) {
           return true;
         }
       }
-      return false;
-      // initialize variables j to the given input and i to zero
-      // loop
-      //   initialize an empty array
-      //   open a for loop, while i is less than row's length
-      //       push the coordinate value to the array
-      //       increment i and j by 1
-      //     sum the values in the array
-      //       if greater than 1
-      //         return true
-      // if not, then return false
-    },
 
-    // test if any major diagonals on this board contain conflicts
-    hasAnyMajorDiagonalConflicts: function() {
-      for (var i = 0; i < this.rows().length; i++) {
-        if (this.hasMajorDiagonalConflictAt(i)) {
+      // if the input is positive, move right by index count via column position
+      if (majorDiagonalColumnIndexAtFirstRow > 0) {
+        for (let j = 0, k = majorDiagonalColumnIndexAtFirstRow; j < rows.length - majorDiagonalColumnIndexAtFirstRow; j++, k++) {
+          sum += rows[j][k];
+        }
+        if (sum > 1) {
           return true;
         }
       }
+
+      // if input is negative, move downwards by index count via row position
+      if (majorDiagonalColumnIndexAtFirstRow < 0) {
+        var absInput = Math.abs(majorDiagonalColumnIndexAtFirstRow);
+        for (let j = absInput, k = 0; k < rows.length - absInput; j++, k++) {
+          sum += rows[j][k];
+        }
+        if (sum > 1) {
+          return true;
+        }
+      }
+      // return false
       return false; // fixme
-      // loop over the first row
-      // callback to each column index
-      // return true
-      // return false;
     },
 
+    // test if any major diagonals on this board contain conflicts
+    hasAnyMajorDiagonalConflicts: function () {
+      var rows = this.rows();
+      for (let i = 0; i < rows.length; i++) {
+        if (this.hasMajorDiagonalConflictAt(this._getFirstRowColumnIndexForMajorDiagonalOn(0, i))) {
+          return true;
+        }
+      }
+      for (let i = 0; i < rows.length; i++) {
+        if (this.hasMajorDiagonalConflictAt(this._getFirstRowColumnIndexForMajorDiagonalOn(i, 0))) {
+          return true;
+        }
+      }
+      return false;
 
+      // _getFirstRowColumnIndexForMajorDiagonalOn: function (rowIndex, colIndex) {
+      //   return colIndex - rowIndex;
+      // },
+
+      // var firstPosition = this._getFirstRowColumnIndexForMajorDiagonalOn(this.rows()[0], 0);
+      // if (this.hasMajorDiagonalConflictAt(firstPosition)) {
+      //   return true;
+      // }
+      // return false;
+      // get first position
+      //   if this.hasMajorDiagonalConflictAt first position
+      //     return true;
+      //   otherwise it's false
+    },
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      for (let i = 0; i < this.rows().length; i++) {
-        var bucket = [];
-        var minorColumnIndex = minorDiagonalColumnIndexAtFirstRow;
-        var rows = i;
-
-        while ((rows < this.rows().length) && (minorColumnIndex >= 0)) {
-          var elementAt = this.rows()[rows][minorColumnIndex];
-          bucket.push(elementAt);
-          rows++;
-          minorColumnIndex--;
-        }
-
-        var sum = 0;
-        for (let i = 0; i < bucket.length; i++) {
-          sum += bucket[i];
-        }
-        if (sum > 1) {
-          return true;
-        }
-      }
-      return false;
+    hasMinorDiagonalConflictAt: function (minorDiagonalColumnIndexAtFirstRow) {
+      return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
-    hasAnyMinorDiagonalConflicts: function() {
-      for (let i = this.rows().length - 1; i >= 0; i--) {
-        if (this.hasMinorDiagonalConflictAt(i)) {
-          return true;
-        }
-      }
-      return false;
-    }
+    hasAnyMinorDiagonalConflicts: function () {
+      return false; // fixme
+    },
 
     /*--------------------  End of Helper Functions  ---------------------*/
-
-
   });
 
-  var makeEmptyMatrix = function(n) {
-    return _(_.range(n)).map(function() {
-      return _(_.range(n)).map(function() {
+  let makeEmptyMatrix = function (n) {
+    return _(_.range(n)).map(function () {
+      return _(_.range(n)).map(function () {
         return 0;
       });
     });
   };
+})();
 
-}());
