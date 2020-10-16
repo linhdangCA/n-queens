@@ -255,12 +255,63 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function (minorDiagonalColumnIndexAtFirstRow) {
+      //
+      // get rows
+      var rows = this.rows();
+      // initialize sum to zero
+      var sum = 0;
+
+      // if index is zero, evaluate the main major diagonal
+      if (minorDiagonalColumnIndexAtFirstRow === rows.length - 1) {
+        // use to check the main diagonal
+        for (var h = rows.length - 1; h >= 0; h--) {
+          sum += rows[h][h];
+        }
+        if (sum > 1) {
+          return true;
+        }
+      }
+
+      // if the input is less than the main minor diagonal, move left by index count via column position
+      if (minorDiagonalColumnIndexAtFirstRow < rows.length - 1) {
+        for (let j = 0, k = minorDiagonalColumnIndexAtFirstRow; k >= 0; j++, k--) {
+          sum += rows[j][k];
+        }
+        if (sum > 1) {
+          return true;
+        }
+      }
+
+      // if input is greater than the main minor diagonal, move downwards by index count via row position
+      if (minorDiagonalColumnIndexAtFirstRow > rows.length - 1) {
+        //var absInput = Math.abs(minorDiagonalColumnIndexAtFirstRow);
+        for (let j = minorDiagonalColumnIndexAtFirstRow - (rows.length - 1), k = rows.length - 1;
+          j <= rows.length - 1; j++, k--) {
+          sum += rows[j][k];
+        }
+        if (sum > 1) {
+          return true;
+        }
+      }
+      // return false
       return false; // fixme
+
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function () {
-      return false; // fixme
+      var rows = this.rows();
+      for (let i = rows.length - 1; i >= 0; i--) {
+        if (this.hasMinorDiagonalConflictAt(this._getFirstRowColumnIndexForMinorDiagonalOn(0, i))) {
+          return true;
+        }
+      }
+      for (let i = 0; i < rows.length; i++) {
+        if (this.hasMinorDiagonalConflictAt(this._getFirstRowColumnIndexForMinorDiagonalOn(i, rows.length - 1))) {
+          return true;
+        }
+      }
+      return false;
     },
 
     /*--------------------  End of Helper Functions  ---------------------*/
